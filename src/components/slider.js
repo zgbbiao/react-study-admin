@@ -4,7 +4,17 @@ import {Layout} from "antd/lib/index";
 import { mapStateToProps, mapDispatchToProps } from '@/reducer/connect'
 import {connect} from "react-redux";
 import { filterData } from '@/utils/index.js'
+import { menus as menusConfig } from '@/router/index'
+import { OldSchoolMenuLink } from '@/router/utils'
 const { Sider } = Layout;
+const SubMenu = Menu.SubMenu;
+const slideMenu = (routes) => Array.isArray(routes) && routes.map(item => (
+    (!Array.isArray(item.routes) &&   <Menu.Item key={item.path}><OldSchoolMenuLink route={item}></OldSchoolMenuLink></Menu.Item>) || (
+        <SubMenu key={item.path} title={<Menu.Item key={item.path}><OldSchoolMenuLink route={item}></OldSchoolMenuLink></Menu.Item>}>
+            {slideMenu(item.routes)}
+        </SubMenu>)
+    )
+);
 class MySlider extends Component {
     render() {
         let { slidecollapsed } = this.props
@@ -17,18 +27,7 @@ class MySlider extends Component {
             >
                 <div className="logo" />
                 <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-                    <Menu.Item key="1">
-                        <Icon type="user" />
-                        <span>nav 1</span>
-                    </Menu.Item>
-                    <Menu.Item key="2">
-                        <Icon type="video-camera" />
-                        <span>nav 2</span>
-                    </Menu.Item>
-                    <Menu.Item key="3">
-                        <Icon type="upload" />
-                        <span>nav 3</span>
-                    </Menu.Item>
+                    {slideMenu(menusConfig)}
                 </Menu>
             </Sider>
 
