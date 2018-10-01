@@ -42,9 +42,7 @@ const getBreadCurmbs  = (newBreadcrumbNameMap, arr = []) => {
                 </Link>
             </Breadcrumb.Item>
         )
-        {
-            Array.isArray(item.routes) && item.routes.length > 0 && getBreadCurmbs(item.routes, arr)
-        }
+        { Array.isArray(item.routes) && item.routes.length > 0 && getBreadCurmbs(item.routes, arr) }
         return arr
     })
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Icon } from 'antd';
-import { Route, Link } from "react-router-dom";
+import { Route, Link, Redirect } from "react-router-dom";
 // 渲染当前组件
 export const RouteWithSubRoutes = route => (
     <Route
@@ -8,7 +8,8 @@ export const RouteWithSubRoutes = route => (
         exact={route.exact}
         render={props =>{
             return (
-                <route.component {...props} routes={route.routes} />
+                route &&( route.Redirect ? (<Redirect to={route.Redirect}></Redirect>) :
+                (<route.component {...props} routes={route.routes} />))
             )
         }}
     />
@@ -27,8 +28,7 @@ export const OldSchoolMenuLink = ({ route }) => (
         children={({ match }) => {
             return (
                 <div className={match ? "active" : ""}>
-                    <Icon type={route.icon}/>
-                    <Link to={route.path}>{route.name}</Link>
+                    <Link to={route.path}><Icon type={route.icon}/>{route.name}</Link>
                 </div>
             )
         }}
