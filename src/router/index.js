@@ -2,7 +2,6 @@ import React from 'react'
 import Login from '@/views/login/index'
 import Index from '@/views/index/index'
 import { RenderRoutes } from '@/router/utils'
-const Test = () => <h3>test</h3>
 const Ui = ({routes}) => (<div>
     <h3>Ui
     </h3>

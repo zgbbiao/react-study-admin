@@ -26,3 +26,7 @@
 .ant-menu.ant-menu-dark .ant-menu-item-selected a, .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected a{
     color: #fff;
 }
+
+li.ant-menu-item>div, .ant-menu-submenu-title>div{
+    overflow: hidden;
+}

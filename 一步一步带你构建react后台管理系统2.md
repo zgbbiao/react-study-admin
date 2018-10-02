@@ -269,3 +269,158 @@ const Ui = ({routes}) => (<div>
 ```
 
 这样 就可以看到， 点击侧边栏， 右侧的内容会跟着点击那个菜单而进行变化了。
+
+[gitHub项目地址](https://github.com/zgbbiao/react-study-admin) https://github.com/zgbbiao/react-study-admin
+
+切换版本到 `侧边栏与右侧内容框架完成`  就是当前的代码。
+
+## 修改面包屑导航
+
+在切换侧边栏导航的时候， 发现内容区上侧的面包屑没有发生变化，这时候就需要修改他。
+
+1. components/crumbs.js
+```
+iimport React, { Component } from 'react';
+ import { Link, withRouter } from 'react-router-dom';
+ import { Breadcrumb } from 'antd';
+ import { connect } from 'react-redux'
+ import { crumbsMap } from "../reducer/connect";
+ import { filterData, deleObj } from '@/utils/index.js'  // +-
+ 
+ const deepFlatten = arr => [].concat(...arr.map(v => Array.isArray(v) ? deepFlatten(v) : ( typeof v === 'object' ? (Array.isArray(v.routes) ? deepFlatten(v.routes.concat(deleObj(v, 'routes'))) : v) : v )));  // +-
+ let breadcrumbNameMap = []
+ 
+ class Crumbs extends Component {
+     componentDidMount () {
+         this.onTrun()
+     }
+     onTrun () {}
+     render() {
+         let { location, getRouterConfig, routerConfig } = this.props
+         routerConfig = filterData(routerConfig, 'routerConfig')
+         this.onTrun = getRouterConfig
+         routerConfig = routerConfig.menus;
+         breadcrumbNameMap = (Array.isArray(routerConfig) && deepFlatten(routerConfig)) || []
+         const pathSnippets = location.pathname.split('/').filter(i => i); // +-
+         const extraBreadcrumbItems = pathSnippets.map((_, index) => {  // +-
+             const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
+             let ItemName = Array.isArray(breadcrumbNameMap) && breadcrumbNameMap.map(item =>
+                     (item.path === url) ? item.name : ''
+                 )
+             ItemName = ItemName.join('')
+             return (
+             ItemName && (<Breadcrumb.Item key={url}>
+                     <Link to={url}>
+                         {ItemName}
+                     </Link>
+             </Breadcrumb.Item>) || ''
+             );
+         });
+         return (
+             <div className="my-breadcrumb">
+                 <Breadcrumb>
+                     {extraBreadcrumbItems} // +-
+                 </Breadcrumb>
+             </div>
+         )
+     }
+ }
+ export default connect(crumbsMap.mapStateToProps, crumbsMap.mapDispatchToProps)(withRouter(Crumbs));
+
+```
+
+ 这里， 引入了deleObj（过滤数据的方法）
+ 
+ 修改了 deepFlatten 方法（将多维数组转换为一维数组）。
+ 
+ 接下来， 拿到当前浏览器url.pathname  并按照/进行拆分，从头开始逐一与路由表内的数据进行匹配， 当匹配成功， 则返回对应的breadcrumb 
+ 
+ 2. components/slider.js
+ 
+ 这里需要在点击导航菜单的时候， 进行数据（store,action）切换。
+ ```
+ import React, { Component } from 'react';
+ import { Menu } from 'antd';
+ import {Layout} from "antd/lib/index";
+ import { mapStateToProps, mapDispatchToProps } from '@/reducer/connect'
+ import {connect} from "react-redux";
+ import { filterData } from '@/utils/index.js'
+ import { menus as menusConfig } from '@/router/index'
+ import slideMenu from '@/components/slideMenu'
+ const { Sider } = Layout;
+ 
+ class MySlider extends Component {
+     render() {
+         let { slidecollapsed, getRouterConfig } = this.props  // +-
+         slidecollapsed =  filterData(slidecollapsed, 'slidecollapsed')
+         return (
+             <Sider
+                 trigger={null}
+                 collapsible
+                 collapsed={ slidecollapsed }
+             >
+                 <div className="logo" />
+                 <div onClick={getRouterConfig}>  // +-
+                     <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}                 >
+                         {slideMenu(menusConfig)}
+                     </Menu>
+                 </div>
+ 
+             </Sider>
+ 
+         )
+     }
+ }
+ export default connect(mapStateToProps, mapDispatchToProps)(MySlider);
+ 
+```
+
+ 这里给 slide组件注入了一个切换action事件， 并给menu注册一个事件，点击时切换action, 这样crumb组件就能够监听并且发生改变。
+ 
+ 3. reducer/connect.js
+ 
+ 注入getRouterConfig 事件
+ ```
+export const mapDispatchToProps = (dispatch) => {
+    return {onSlidecollapsed: () => dispatch(action_slidecollapsed), getRouterConfig: () => {
+            return dispatch(routerConfig)
+        }}
+}
+
+```
+
+4. utils/index.js
+添加一个过滤key的方法
+```
+export const deleObj = (obj, key) => {
+    let obj2 = Object.assign({}, obj)
+    delete obj2[key]
+    return obj2
+}
+
+```
+
+5. 修改样式
+
+- views/index/index.css
+
+添加样式
+```
+.ant-menu li a{
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.ant-menu.ant-menu-dark .ant-menu-item-selected a, .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected a{
+    color: #fff;
+}
+
+li.ant-menu-item>div, .ant-menu-submenu-title>div{
+    overflow: hidden;
+}
+```
+
+6. 完成。
+完成了，  点击侧边导航栏， 就可以看得到右侧的面包屑跟着变化了。
+

@@ -4,7 +4,9 @@ export const mapStateToProps = (state) => {
     return {slidecollapsed:  state.slidecollapsed}
 }
 export const mapDispatchToProps = (dispatch) => {
-    return {onSlidecollapsed: () => dispatch(action_slidecollapsed)}
+    return {onSlidecollapsed: () => dispatch(action_slidecollapsed), getRouterConfig: () => {
+            return dispatch(routerConfig)
+        }}
 }
 
 export const crumbsMap = {
