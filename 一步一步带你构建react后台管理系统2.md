@@ -424,3 +424,6 @@ li.ant-menu-item>div, .ant-menu-submenu-title>div{
 6. 完成。
 完成了，  点击侧边导航栏， 就可以看得到右侧的面包屑跟着变化了。
 
+[gitHub项目地址](https://github.com/zgbbiao/react-study-admin) https://github.com/zgbbiao/react-study-admin
+
+git版本为 `修改侧边栏与修改面包屑菜单导航`

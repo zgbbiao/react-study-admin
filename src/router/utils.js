@@ -2,11 +2,19 @@ import React from 'react';
 import { Icon } from 'antd';
 import { Route, Link, Redirect } from "react-router-dom";
 // 渲染当前组件
-export const RouteWithSubRoutes = route => (
-    <Route
+export const RouteWithSubRoutes = route => (<Route
         path={route.path}
         exact={route.exact}
         render={props =>{
+           var isAuthenticated  = sessionStorage.getItem('isAuthenticated')
+            if ( route.path !== '/login' && !isAuthenticated ) {
+                return <Redirect
+                    to={{
+                        pathname: "/login",
+                        state: { from: props.location }
+                    }}
+                />
+            }
             return (
                 route &&( route.Redirect ? (<Redirect to={route.Redirect}></Redirect>) :
                 (<route.component {...props} routes={route.routes} />))

@@ -15,9 +15,11 @@ class MyHeader extends Component {
         this.state.onSlidecollapsed()
     }
     render() {
-        let { slidecollapsed } = this.props
+        let { slidecollapsed, toggleSlide, isSlide } = this.props
         slidecollapsed = filterData(slidecollapsed, 'slidecollapsed')
+        console.log(this.props)
         return (
+            <div>
                 <Header style={{ background: '#fff', padding: 0 }}>
                     <Icon
                         className="trigger"
@@ -25,6 +27,8 @@ class MyHeader extends Component {
                         onClick={this.toggle}
                     />
                 </Header>
+                <span onClick={(e)=>{ e.preventDefault(); e.stopPropagation(); toggleSlide() }}>toggleSlide</span>
+            </div>
         )
     }
 }

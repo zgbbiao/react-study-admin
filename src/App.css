@@ -1,6 +1,5 @@
 @import '~antd/dist/antd.css';
-.App {
-}
+@import './assets/css/biao.min.css';
 
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
