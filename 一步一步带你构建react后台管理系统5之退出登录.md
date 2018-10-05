@@ -1,7 +1,30 @@
+# 一步一步构件react后台系统5 之 退出登录
+
+## 退出登录
+
+1. 后台添加退出接口
+
+- routes/index.js
+直接提示退出成功
+```
+router.post('/logout', async (ctx, next) => {
+    let body = ctx.request.body
+    let username = body.username;
+    ctx.body = {
+        code: 200,
+        message: "退出成功"
+    }
+})
+```
+
+2. 修改react后台系统页面
+
+- components/header.js
+```
 import React, { Component } from 'react';
 import { Layout, Menu, Icon, Badge } from 'antd';
 import { connect  } from 'react-redux'
-import { mapLogout } from '@/reducer/connect'
+import { mapLogout } from '@/reducer/connect'  // +-
 import { filterData } from '@/utils/index.js'
 import { Redirect } from "react-router-dom";
 const { Header } = Layout;
@@ -13,7 +36,7 @@ class MyHeader extends Component {
         this.state = {
             onSlidecollapsed: this.props.onSlidecollapsed,
             current: 'mail',
-            isAuthenticated: true
+            isAuthenticated: true  // +
         };
     }
     toggle = () => {
@@ -25,11 +48,11 @@ class MyHeader extends Component {
             current: e.key,
         });
     }
-    logout = (e) => {
-        this.props.onLogout()
-        sessionStorage.removeItem('isAuthenticated')
+    logout = (e) => { // +
+        this.props.onLogout({})  // 退出登录， 如果是正常项目中， 应该会传递一些数据过去，这里没有用户数据， 因此传递个空对象
+        sessionStorage.removeItem('isAuthenticated')  // 发出退出请求后， 直接退出， 无需等待后台返回响应。
         this.setState({
-            isAuthenticated: false
+            isAuthenticated: false // 判断是否登录
         })
     }
     render() {
@@ -37,7 +60,7 @@ class MyHeader extends Component {
         slidecollapsed = filterData(slidecollapsed, 'slidecollapsed')
         let avater = '@/logo.svg'
         console.log(this.props)
-        if (!this.state.isAuthenticated ) {
+        if (!this.state.isAuthenticated ) {  // 退出后就重定向
             return <Redirect to="/login" />;
         }
         return (
@@ -48,7 +71,8 @@ class MyHeader extends Component {
                         type={ slidecollapsed ? 'menu-unfold' : 'menu-fold'}
                         onClick={this.toggle}
                     />
-                    <div className="fr">
+                    // + 添加菜单组件
+
                     <Menu
                         onClick={this.handleClick}
                         selectedKeys={[this.state.current]}
@@ -71,11 +95,55 @@ class MyHeader extends Component {
                             </MenuItemGroup>
                         </SubMenu>
                     </Menu>
-                    </div>
                 </Header>
 
             </div>
         )
     }
 }
-export default connect(mapLogout.mapStateToProps, mapLogout.mapDispatchToProps)(MyHeader);
+export default connect(mapLogout.mapStateToProps, mapLogout.mapDispatchToProps)(MyHeader);  // +-
+```
+
+- reducer/connect.js
+
+删除掉原本的两个方法， 改成对象形式。
+```
+export const mapLogout = {
+    mapStateToProps: (state) => {
+        var slidecollapsed = {
+            slidecollapsed: state.slidecollapsed,
+            isSlide: false
+        }
+        return {...state.slidecollapsed, ...slidecollapsed}
+    },
+    mapDispatchToProps: (dispatch) => {
+        return {onSlidecollapsed: () => dispatch(action_slidecollapsed), getRouterConfig: () => {
+                return dispatch(routerConfig)
+            }, toggleSlide: () => {
+                dispatch({type: action_slidecollapsed.type})
+            },
+            onLogout: (data) => { // + 添加退出事件。
+                return dispatch(fetchPosts('/logout', action_slidecollapsed.type, 'logoutData', data))
+            }
+        }
+    }
+}
+```
+
+- 修改了上边的mapLogout， 需要把header与slider组件也修改一下。
+
+- conponents/header
+```
+export default connect(mapLogout.mapStateToProps, mapLogout.mapDispatchToProps)(MyHeader);  // +-
+```
+
+- componets/slider.js
+
+```
+import { mapLogout } from '@/reducer/connect'
+export default connect(mapLogout.mapStateToProps, mapLogout.mapDispatchToProps)(MySlider);
+```
+
+
+改好了，  现在点击退出登录， 就退出成功了。
+

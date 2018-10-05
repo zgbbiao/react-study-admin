@@ -1,21 +1,28 @@
-import { action_slidecollapsed, routerConfig, action_login } from '@/reducer/action.js'
+import { action_slidecollapsed, routerConfig, action_login, ACTION_LOGIN, ACTION_REGISTER } from '@/reducer/action.js'
 import http from '@/api/http.js'
 import { receive } from '@/reducer/actionCreate.js'
-import { ACTION_LOGIN, ACTION_REGISTER } from '@/reducer/action.js'
 
-export const mapStateToProps = (state) => {
-    console.log(state)
-    return {slidecollapsed:  state.slidecollapsed,
-        isSlide: false,
+export const mapLogout = {
+    mapStateToProps: (state) => {
+        var slidecollapsed = {
+            slidecollapsed: state.slidecollapsed,
+            isSlide: false
+        }
+        return {...state.slidecollapsed, ...slidecollapsed}
+    },
+    mapDispatchToProps: (dispatch) => {
+        return {onSlidecollapsed: () => dispatch(action_slidecollapsed), getRouterConfig: () => {
+                return dispatch(routerConfig)
+            }, toggleSlide: () => {
+                dispatch({type: action_slidecollapsed.type})
+            },
+            onLogout: (data) => {
+                return dispatch(fetchPosts('/logout', action_slidecollapsed.type, 'logoutData', data))
+            }
+        }
     }
 }
-export const mapDispatchToProps = (dispatch) => {
-    return {onSlidecollapsed: () => dispatch(action_slidecollapsed), getRouterConfig: () => {
-            return dispatch(routerConfig)
-        }, toggleSlide: () => {
-        dispatch({type: action_slidecollapsed.type})
-    }}
-}
+
 
 export const crumbsMap = {
     mapStateToProps (state) {

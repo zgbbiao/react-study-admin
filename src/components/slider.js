@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Menu } from 'antd';
 import {Layout} from "antd/lib/index";
-import { mapStateToProps, mapDispatchToProps } from '@/reducer/connect'
+// import { mapStateToProps, mapDispatchToProps } from '@/reducer/connect'
+import { mapLogout } from '@/reducer/connect'
 import {connect} from "react-redux";
 import { filterData } from '@/utils/index.js'
 import { menus as menusConfig } from '@/router/index'
@@ -30,4 +31,5 @@ class MySlider extends Component {
         )
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(MySlider);
+
+export default connect(mapLogout.mapStateToProps, mapLogout.mapDispatchToProps)(MySlider);
