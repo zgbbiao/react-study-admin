@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import { Row, Col } from 'antd';
 import './index.css'
 import http from '@/api/http.js'
@@ -73,7 +73,7 @@ class Login extends React.Component {
                                         </Button>
                                     </Col>
                                 <Col span={18} className="tr">
-                                    <a href="">还没有账号？ 去注册</a>
+                                    <Link to="/register">还没有账号？ 去注册</Link>
                                 </Col>
                             </Row>
                         </FormItem>

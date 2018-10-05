@@ -7,7 +7,7 @@ export const RouteWithSubRoutes = route => (<Route
         exact={route.exact}
         render={props =>{
            var isAuthenticated  = sessionStorage.getItem('isAuthenticated')
-            if ( route.path !== '/login' && !isAuthenticated ) {
+            if ( !(typeof route.meta === 'object' && route.meta.isAuth) && !isAuthenticated ) {
                 return <Redirect
                     to={{
                         pathname: "/login",

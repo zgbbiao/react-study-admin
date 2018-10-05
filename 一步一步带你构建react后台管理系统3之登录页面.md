@@ -479,5 +479,5 @@ export default connect(loginMap.mapStateToProps, loginMap.mapDispatchToProps)(Fo
 
 在浏览器输入账号密码， 然后登录， 登录成功后， 会自动跳转到首页， 快输入locaohost:3000去试一下吧。
 
-## 注册页面
+
 

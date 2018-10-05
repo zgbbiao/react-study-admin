@@ -1,0 +1,25 @@
+.register {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    height: 100%;
+    background: #f3f3f3;
+}
+.register>.register-form {
+    width: 60%;
+    height: auto;
+    padding: 36px;
+    -webkit-box-shadow: 0 0 100px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.08);
+    background: #fff;
+}
+
+#root{
+    height: 100%;
+}
+.App{
+    height: 100%;
+}

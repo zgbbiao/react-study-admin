@@ -1,6 +1,7 @@
 import React from 'react'
 import Login from '@/views/login/index'
 import Index from '@/views/index/index'
+import Register from '@/views/register/index'
 import { RenderRoutes } from '@/router/utils'
 const Ui = ({routes}) => (<div>
     <h3>Ui
@@ -22,8 +23,14 @@ export const menus = [    // 菜单相关路由
     { path: '/index/animation', name: '动画', icon: 'video-camera', component: Animation },
     { path: '/index/form', name: '表格', icon: 'video-camera', component: From },
 ]
+// isAuth 表示不用验证是否登录
 export const main = [
-    { path: '/login', exact: true, name: '登录', component: Login },
+    { path: '/login', exact: true, name: '登录', component: Login, meta: {
+            isAuth: true
+        } },
+    { path: '/register', exact: true, name: '注册', component: Register, meta: {
+            isAuth: true
+        }  },
     { path: '/', exact: true,  name: '首页', Redirect: '/index'},
     {
         path: '/index', name: '首页', component: Index,
