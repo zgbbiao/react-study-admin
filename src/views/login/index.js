@@ -7,6 +7,8 @@ import {connect} from "react-redux";
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import { action_login } from '@/reducer/action.js'
 import { loginRequest, receiveLogin } from '@/reducer/actionCreate.js'
+import { mapLogin } from '@/reducer/connect.js'
+
 const FormItem = Form.Item;
 
 class Login extends React.Component {
@@ -84,27 +86,5 @@ class Login extends React.Component {
     }
 }
 
-function fetchPosts(subreddit, data) {
-    return dispatch => {
-        dispatch(receiveLogin(subreddit, '暂无数据'))
-        return http.post(`/login`, data)
-            .then(res => {
-                dispatch(receiveLogin(subreddit, res))
-            })
-    }
-}
-export const loginMap = {
-    mapStateToProps (state) {
-        return state.getLogin
-    },
-    mapDispatchToProps (dispatch) {
-        return {handleLogin: (data) => {
-            return dispatch(fetchPosts('loginData', data))
-        }}
-    }
-}
-
-
-
-export default connect(loginMap.mapStateToProps, loginMap.mapDispatchToProps)(Form.create()(Login));
+export default connect(mapLogin.mapStateToProps, mapLogin.mapDispatchToProps)(Form.create()(Login));
 // export default connect(loginMap.mapStateToProps, loginMap.mapDispatchToProps)(Login);

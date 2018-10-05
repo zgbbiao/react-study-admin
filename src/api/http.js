@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { message } from 'antd';
 let loadingInstance = {
     close: () =>{}
 }
@@ -19,15 +20,6 @@ function cloneLoading () {
 
 // request拦截器
 service.interceptors.request.use(config => {
-    // Do something before request is sent
-    // if (store.getters.token) {
-    //   config.headers['X-Token'] = getToken() // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
-    // }
-    // if (config.data && config.data.XLoading) {
-    //     loadingInstance = Loading.service({ fullscreen: true })
-    // } else if (config.params && config.params.XLoading) {
-    //     loadingInstance = Loading.service({ fullscreen: true })
-    // }
     return config
 }, error => {
     cloneLoading()
@@ -38,10 +30,12 @@ service.interceptors.request.use(config => {
 // respone拦截器
 service.interceptors.response.use(
     response => {
-        // 对响应数据做点什么
-        // if (response.config.headers['X-Loading']) {
         cloneLoading()
-        // }
+        if (response.data && response.data.code === 0) {
+            message.error(response.data.message, 1.5)
+        } else if (response.data && response.data.code === 200) {
+            message.success(response.data.message, 1.5)
+        }
         return response.data
     }, error => {
         console.log('err' + error)// for debug
@@ -82,6 +76,7 @@ service.interceptors.response.use(
                     error.desc = 'HTTP版本不受支持'
                     break;
             }
+            message.error(error.desc)
         }
         return Promise.reject(error)
     })

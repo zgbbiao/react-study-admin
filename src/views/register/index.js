@@ -1,7 +1,10 @@
 import React from 'react'
 import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete } from 'antd';
 import { validatorPhone } from '@/utils/index'
+import { Redirect } from "react-router-dom";
 import './index.css'
+import {connect} from "react-redux";
+import { mapReigster } from '@/reducer/connect.js'
 const FormItem = Form.Item;
 const Option = Select.Option;
 const AutoCompleteOption = AutoComplete.Option;
@@ -9,7 +12,9 @@ const AutoCompleteOption = AutoComplete.Option;
 class RegistrationForm extends React.Component {
     state = {
         confirmDirty: false,
-        autoCompleteResult: []
+        autoCompleteResult: [],
+        formValue: [],
+        isLoginLoading: false
     };
 
     handleSubmit = (e) => {
@@ -17,6 +22,11 @@ class RegistrationForm extends React.Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
+                this.props.hanleRegister(values)
+                this.setState({
+                    formValue: values,
+                    isLoginLoading: false
+                })
             }
         });
     }
@@ -61,7 +71,22 @@ class RegistrationForm extends React.Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         const { autoCompleteResult } = this.state;
-        console.log(this.props)
+        let { reigsterData, loginData } = this.props
+        // 注册成功， 自动登录
+        if (typeof reigsterData === 'object' && reigsterData.code === 200) {
+            if (!this.state.isLoginLoading) {
+                this.props.handleLogin(this.state.formValue)
+                this.setState({
+                    isLoginLoading: true
+                })
+            }
+            if (typeof loginData === 'object' && loginData.code === 200) {
+                sessionStorage.setItem('isAuthenticated', true)
+                let from = {}
+                from.pathname = '/';
+                return <Redirect to={from} />;
+            }
+        }
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
@@ -96,7 +121,7 @@ class RegistrationForm extends React.Component {
         const websiteOptions = autoCompleteResult.map(website => (
             <AutoCompleteOption key={website}>{website}</AutoCompleteOption>
         ));
-
+        console.log(this.props)
         return (
             <div className="register">
                 <div className="register-form">
@@ -109,7 +134,7 @@ class RegistrationForm extends React.Component {
                             rules: [{
                                 message: '请输入用户名称',
                             }, {
-                                required: true, message: '用户名称必填',
+                                required: false, message: '用户名称必填',
                             }],
                         })(
                             <Input />
@@ -228,7 +253,8 @@ const mapPropsToFields = props => {
 const onValuesChange = (_, values) => {
 }
 
-const WrappedRegistrationForm = Form.create({onFieldsChange, mapPropsToFields, onValuesChange})(RegistrationForm);
+
+const WrappedRegistrationForm = connect( mapReigster.mapStateToProps, mapReigster.mapDispatchToProps )(Form.create({onFieldsChange, mapPropsToFields, onValuesChange})(RegistrationForm));
 
 // 传递参数给form组件
 class Register extends React.Component {
