@@ -1072,3 +1072,108 @@ export const menus = [    // 菜单相关路由
 
 这里， 我们的table封装就弄好了， 虽然看起来文件很多， 但是用起来却很方便， 各种功能不用再次写一遍， 只需要重写需要修改的方法便可以达到再次利用。  后期主要修改clomus与data数据， 里面的各种功能都可通过开关控制。 是不是很方便？
 
+## 验证是否table组件是否可重用
+
+- views/users/index2.js
+复制index.js内容到index2内
+添加this.cloums方法, 这个方法是从Mix拷贝过来的，  添加             {
+                                                     title: '用户描述',
+                                                     dataIndex: 'description',
+                                                     key: 'description',
+                                                     editable: true,
+                                                 },  表格头
+
+我们后台生成数据的时候， 是带有description属性的。  我们这不做多修改， 添加这个数据九号。
+
+
+```
+columns () {
+        let self = this;
+        return ([{
+            title: '用户名称',
+            dataIndex: 'username',
+            key: 'username',
+            width: 150,
+            editable: true,
+            render: text => <a href="javascript:;">{text}</a>,
+        }, {
+            title: '手机号码',
+            dataIndex: 'phone',
+            key: 'phone',
+            width: 150,
+            editable: true,
+        }, {
+            title: '用户邮箱',
+            dataIndex: 'email',
+            key: 'email',
+            editable: true,
+        },
+            {
+                title: '用户描述',
+                dataIndex: 'description',
+                key: 'description',
+                editable: true,
+            },
+            {
+            title: '操作',
+            key: 'action',
+            dataIndex: 'action',
+            width: 360,
+            editable: false,
+            render: function (text, record, index){
+                let _self = self
+                if (_self.isEditing(record)) {
+                    return (
+                        <span>
+                  <EditableContext.Consumer>
+                    {form => (
+                        <a
+                            href="javascript:;"
+                            onClick={() => _self.save(form, record.key)}
+                            style={{ marginRight: 8 }}
+                        >
+                            保存
+                        </a>
+                    )}
+                  </EditableContext.Consumer>
+                  <Popconfirm
+                      title="是否取消?"
+                      onConfirm={() => _self.cancel(record.key)}
+                  >
+                    <a>取消</a>
+                  </Popconfirm>
+                </span>
+                    )
+                }
+                return (
+                    <span>
+        <a href="javascript:;" ><Icon type="show" />查看详情</a>
+        <Divider type="vertical" />
+        <a href="javascript:;" onClick={_self.handleEdit(record)}><Icon type="edit" />编辑</a>
+        <Divider type="vertical" />
+        <a href="javascript:;">
+        <Popconfirm title="确认删除?" cancelText="取消" okText="确认" onConfirm={() => _self.onDelete(record, index)}>
+        <Icon type="delete" /> 删除
+        </Popconfirm>
+        </a>
+        </span>
+                )},
+        }])
+    }
+```
+
+继承的时候， 重写数据。
+```
+       this.state = {
+            ...tableMix.state, columns: this.columns()
+        }
+```
+
+- route/index.js
+
+把 index 换成index2 ，  无缝对接。
+```
+import User from '@/views/users/index2.js'
+```
+
+而添加功能， 需要自己添加多一个Input， 其他可不变。 这里就不进行演示了。

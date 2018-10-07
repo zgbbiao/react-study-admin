@@ -2,6 +2,7 @@ import React from 'react'
 import Login from '@/views/login/index'
 import Index from '@/views/index/index'
 import User from '@/views/users/index.js'
+import User2 from '@/views/users/index2.js'
 import Register from '@/views/register/index'
 import { RenderRoutes } from '@/router/utils'
 const Ui = ({routes}) => (<div>
@@ -17,7 +18,8 @@ const From = () => <h3>From</h3>
 
 export const menus = [    // 菜单相关路由
     { path: '/index/UI', name: 'UI', icon:'video-camera', component: Ui , routes: [
-            {path: '/index/UI/users', name: '用户列表', icon: 'video-camera', component: User },
+            {path: '/index/UI/users', name: '用户列表1', icon: 'video-camera', component: User },
+            {path: '/index/UI/users2', name: '用户列表2', icon: 'video-camera', component: User2 },
             {path: '/index/UI/Icon', name: '图标', icon: 'video-camera', component: Icon }
         ]
     },
