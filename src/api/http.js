@@ -33,7 +33,7 @@ service.interceptors.response.use(
         cloneLoading()
         if (response.data && response.data.code === 0) {
             message.error(response.data.message, 1.5)
-        } else if (response.data && response.data.code === 200) {
+        } else if (response.data && response.data.code === 200 && response.data.message) {
             message.success(response.data.message, 1.5)
         }
         return response.data
