@@ -1177,3 +1177,7 @@ import User from '@/views/users/index2.js'
 ```
 
 而添加功能， 需要自己添加多一个Input， 其他可不变。 这里就不进行演示了。
+
+[github地址](https://github.com/zgbbiao/react-study-admin)
+git版本`验证table组件是可重用`
+

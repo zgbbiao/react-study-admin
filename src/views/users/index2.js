@@ -186,7 +186,7 @@ class Users extends React.Component {
         let { modelVisible, modelLoading } = state
         return (
             <div>
-                <AddModel modelVisible={modelVisible} modelLoading={modelLoading} addUserList={this.addUserList}></AddModel>
+                <AddModel {...state} addUserList={this.addUserList}></AddModel>
                 <TableComponent {...state}></TableComponent>
             </div>
         )

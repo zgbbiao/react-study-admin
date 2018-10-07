@@ -21,7 +21,8 @@ let tableMixNativ = {
         data: [],
         handleAdd: false,
         editingKey: undefined,
-        modelVisible: false
+        modelVisible: false,
+        modelCancel: undefined
     },
     methods: {
         pagination () {
@@ -180,7 +181,14 @@ let tableMixNativ = {
             tableMixNativ.state.pagination = b.pagination(b)
             tableMixNativ.state.columns = b.columns(b)
             tableMixNativ.state.handleAdd = b.handleAdd
+            tableMixNativ.state.modelCancel = b.modelCancel
             Object.setPrototypeOf(a, b)
+        },
+        modelCancel () {
+            this.setState({
+                modelVisible: false,
+                modelLoading: false
+            })
         }
     }
 }

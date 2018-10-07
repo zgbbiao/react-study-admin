@@ -132,6 +132,7 @@ class AddModel extends React.Component {
 
     handleCancel = () => {
         this.setState({ visible: false });
+        typeof this.props.modelCancel === 'function' && this.props.modelCancel()
     }
     componentWillUpdata () {
     }
