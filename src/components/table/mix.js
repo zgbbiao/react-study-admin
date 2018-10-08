@@ -1,7 +1,6 @@
 import React from 'react'
 import { Icon, Popconfirm, Divider } from 'antd';
 import EditableContext from '@/components/table/EditableContext'
-import { editUserList } from '@/api/request.js'
 
 let tableMixNativ = {
     state: {
@@ -33,7 +32,6 @@ let tableMixNativ = {
                     onChange: (page, pageSize) => {
                     },
                     total: 0,
-                    showSizeChanger: true,
                     pageSize: 10,
                     hideOnSinglePage: false,
                     showSizeChanger: true,

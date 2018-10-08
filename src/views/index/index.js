@@ -9,6 +9,7 @@ import './index.css'
 class Index extends Component {
     render() {
         let { routes } = this.props
+        console.log(this.props)
         return (
             <Layout>
                 <MySlider></MySlider>

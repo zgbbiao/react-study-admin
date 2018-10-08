@@ -1,9 +1,5 @@
 import React from 'react'
-import Login from '@/views/login/index'
-import Index from '@/views/index/index'
-import User from '@/views/users/index.js'
-import User2 from '@/views/users/index2.js'
-import Register from '@/views/register/index'
+import { Login, Index, User, User2, Register } from '@/router/toComponent'
 import { RenderRoutes } from '@/router/utils'
 const Ui = ({routes}) => (<div>
     <h3>Ui
