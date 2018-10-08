@@ -3,8 +3,9 @@ import { Link, withRouter } from 'react-router-dom';
 import { Breadcrumb } from 'antd';
 import { connect } from 'react-redux'
 import { crumbsMap } from "../reducer/connect";
-import { filterData } from '@/utils/index.js'
-const deepFlatten = arr => [].concat(...arr.map(v => Array.isArray(v) ? deepFlatten(v) : v));
+import { filterData, deleObj } from '@/utils/index.js'
+
+const deepFlatten = arr => [].concat(...arr.map(v => Array.isArray(v) ? deepFlatten(v) : ( typeof v === 'object' ? (Array.isArray(v.routes) ? deepFlatten(v.routes.concat(deleObj(v, 'routes'))) : v) : v )));
 let breadcrumbNameMap = []
 
 class Crumbs extends Component {
@@ -16,36 +17,31 @@ class Crumbs extends Component {
         let { location, getRouterConfig, routerConfig } = this.props
         routerConfig = filterData(routerConfig, 'routerConfig')
         this.onTrun = getRouterConfig
-        routerConfig = (typeof routerConfig === 'object' && Object.values(routerConfig)) || []
+        routerConfig = routerConfig.menus;
         breadcrumbNameMap = (Array.isArray(routerConfig) && deepFlatten(routerConfig)) || []
-        var newBreadcrumbNameMap = breadcrumbNameMap.filter((item, i) => {
-            if (item.path === location.pathname) {
-                return item
-            }
-        })
+        const pathSnippets = location.pathname.split('/').filter(i => i);
+        const extraBreadcrumbItems = pathSnippets.map((_, index) => {
+            const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
+            let ItemName = Array.isArray(breadcrumbNameMap) && breadcrumbNameMap.map(item =>
+                    (item.path === url) ? item.name : ''
+                )
+            ItemName = ItemName.join('')
+            return (
+            ItemName && (<Breadcrumb.Item key={url}>
+                    <Link to={url}>
+                        {ItemName}
+                    </Link>
+            </Breadcrumb.Item>) || ''
+            );
+        });
         return (
             <div className="my-breadcrumb">
                 <Breadcrumb>
-                    {getBreadCurmbs(newBreadcrumbNameMap)}
+                    {extraBreadcrumbItems}
                 </Breadcrumb>
             </div>
         )
     }
 }
 
-const getBreadCurmbs  = (newBreadcrumbNameMap, arr = []) => {
-    return arr = newBreadcrumbNameMap.map(item => {
-        arr.push(
-            <Breadcrumb.Item key={item.path}>
-                <Link to={item.path}>
-                    {item.name}
-                </Link>
-            </Breadcrumb.Item>
-        )
-        {
-            Array.isArray(item.routes) && item.routes.length > 0 && getBreadCurmbs(item.routes, arr)
-        }
-        return arr
-    })
-}
 export default connect(crumbsMap.mapStateToProps, crumbsMap.mapDispatchToProps)(withRouter(Crumbs));
