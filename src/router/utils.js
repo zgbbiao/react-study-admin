@@ -1,12 +1,12 @@
 import React from 'react';
-import { Icon } from 'antd';
+import { Icon  } from 'antd';
 import { Route, Link, Redirect } from "react-router-dom";
 // 渲染当前组件
 export const RouteWithSubRoutes = route => (<Route
         path={route.path}
         exact={route.exact}
         render={props =>{
-           var isAuthenticated  = sessionStorage.getItem('isAuthenticated')
+            var isAuthenticated  = sessionStorage.getItem('isAuthenticated')
             if ( !(typeof route.meta === 'object' && route.meta.isAuth) && !isAuthenticated ) {
                 return <Redirect
                     to={{

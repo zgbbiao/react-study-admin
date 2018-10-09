@@ -4,9 +4,7 @@ import {SLIDECOLLAPSED, ROUTERCONFIG, ACTION_LOGIN, ACTION_REGISTER} from '@/red
 const slidecollapsedFuc = (state = { slidecollapsed: false }, action) => {
     switch (action.type) {
         case SLIDECOLLAPSED:
-            return Object.assign({}, state, {
-                slidecollapsed: !state.slidecollapsed
-            })
+            return Object.assign({}, state, action)
         default:
             return state
     }

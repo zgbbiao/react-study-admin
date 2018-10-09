@@ -1,4 +1,4 @@
-# 一步一步构件react后台系统6 之 用户列表
+# 一步一步带你构建react后台管理系统7之用户列表-修改bug
 
 - 修改components/table/mix.js
 

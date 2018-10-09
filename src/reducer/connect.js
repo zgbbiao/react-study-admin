@@ -4,11 +4,7 @@ import { receive } from '@/reducer/actionCreate.js'
 
 export const mapLogout = {
     mapStateToProps: (state) => {
-        var slidecollapsed = {
-            slidecollapsed: state.slidecollapsed,
-            isSlide: false
-        }
-        return {...state.slidecollapsed, ...slidecollapsed}
+        return { headerData: { }, ...state.slidecollapsed}
     },
     mapDispatchToProps: (dispatch) => {
         return {onSlidecollapsed: () => dispatch(action_slidecollapsed), getRouterConfig: () => {
@@ -18,11 +14,32 @@ export const mapLogout = {
             },
             onLogout: (data) => {
                 return dispatch(fetchPosts('/logout', action_slidecollapsed.type, 'logoutData', data))
+            },
+            toggleTabs: (data) => {
+                console.log(data);
+                dispatch(receive(action_slidecollapsed.type,  'headerData', {
+                    ...data
+                }))
             }
         }
     }
 }
 
+export const mapIndex = {
+    mapStateToProps: (state) => {
+        return { headerData: { }, ...state.slidecollapsed}
+    },
+    mapDispatchToProps: (dispatch) => {
+        return {
+            toggleTabs: (data) => {
+                console.log(data);
+                dispatch(receive(action_slidecollapsed.type,  'headerData', {
+                    ...data
+                }))
+            }
+        }
+    }
+}
 
 export const crumbsMap = {
     mapStateToProps (state) {

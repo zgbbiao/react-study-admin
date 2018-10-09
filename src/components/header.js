@@ -20,10 +20,13 @@ class MyHeader extends Component {
         this.state.onSlidecollapsed()
     }
     handleClick = (e) => {
-        console.log('click ', e);
-        this.setState({
-            current: e.key,
-        });
+        if (e.key === 'tabs') {
+            this.changeTabs()
+        } else {
+            this.setState({
+                current: e.key,
+            });
+        }
     }
     logout = (e) => {
         this.props.onLogout()
@@ -32,11 +35,16 @@ class MyHeader extends Component {
             isAuthenticated: false
         })
     }
+    changeTabs = (obj) => {
+        this.props.toggleTabs({
+                tabs: !this.props.headerData.tabs
+            })
+    }
     render() {
-        let { slidecollapsed, toggleSlide, isSlide } = this.props
+        let { slidecollapsed, headerData, toggleSlide, toggleTabs } = this.props
+        let { tabs } = headerData
         slidecollapsed = filterData(slidecollapsed, 'slidecollapsed')
         let avater = '@/logo.svg'
-        console.log(this.props)
         if (!this.state.isAuthenticated ) {
             return <Redirect to="/login" />;
         }
@@ -58,6 +66,9 @@ class MyHeader extends Component {
                             <Badge count={25} overflowCount={10} style={{marginLeft: 10}}>
                                 <Icon type="notification" />
                             </Badge>
+                        </Menu.Item>
+                        <Menu.Item key="tabs">
+                                <Icon type="notification" /> {tabs ? '隐藏tabs' : '显示tabs'}
                         </Menu.Item>
                         <SubMenu title={<span className="avatar"><img src={avater} alt="头像" /><i className="on bottom b-white" /></span>}>
                             <MenuItemGroup title="用户中心">

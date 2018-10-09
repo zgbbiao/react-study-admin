@@ -6,8 +6,8 @@ const Ui = ({routes}) => (<div>
     </h3>
     <RenderRoutes routes={routes}></RenderRoutes>
 </div>)
-const Button = () => <h3>Button</h3>
-const Icon = () => <h3>Icon</h3>
+const Button = () => <h3>Button <input type="text"/></h3>
+const Icon = () => <h3>Icon <input type="text"/></h3>
 const Animation = () => <h3>Animation</h3>
 const From = () => <h3>From</h3>
 

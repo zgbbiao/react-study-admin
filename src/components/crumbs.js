@@ -3,9 +3,8 @@ import { Link, withRouter } from 'react-router-dom';
 import { Breadcrumb } from 'antd';
 import { connect } from 'react-redux'
 import { crumbsMap } from "../reducer/connect";
-import { filterData, deleObj } from '@/utils/index.js'
+import { filterData, deleObj, deepFlatten } from '@/utils/index.js'
 
-const deepFlatten = arr => [].concat(...arr.map(v => Array.isArray(v) ? deepFlatten(v) : ( typeof v === 'object' ? (Array.isArray(v.routes) ? deepFlatten(v.routes.concat(deleObj(v, 'routes'))) : v) : v )));
 let breadcrumbNameMap = []
 
 class Crumbs extends Component {

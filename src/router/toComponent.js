@@ -1,5 +1,6 @@
 import Loadable from 'react-loadable';
 import ContentLoader from '@/components/MyContentLoader';
+
 export const Login = Loadable({
     loader: () => import('@/views/login/index'),
     loading: ContentLoader

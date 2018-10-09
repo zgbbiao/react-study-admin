@@ -16,3 +16,13 @@ export const validatorPhone = function () {
         }
     }
 }
+
+
+export const deepFlatten = arr => [].concat(...arr.map(v => Array.isArray(v) ? deepFlatten(v) : ( typeof v === 'object' ? (Array.isArray(v.routes) ? deepFlatten(v.routes.concat(deleObj(v, 'routes'))) : v) : v )));
+
+// 删除数组置顶元素
+
+export const removeArrItem = (arr, validFunx) => {
+    arr.splice(arr.findIndex(item => validFunx(item)), 1)
+    return arr
+}
